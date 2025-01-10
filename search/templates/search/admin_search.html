@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пошук фільмів для адміністратора</title>
+</head>
+<body>
+    <h1>Пошук фільмів для адміністратора</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Шукати</button>
+    </form>
+
+    {% if results %}
+        <h2>Результати пошуку:</h2>
+        <ul>
+            {% for result in results %}
+                <li>
+                    <strong>{{ result.title }}</strong><br>
+                    <img src="{{ result.image }}" alt="{{ result.title }}" width="150"><br>
+                    <p>{{ result.description }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Немає результатів для вашого запиту.</p>
+    {% endif %}
+</body>
+</html>

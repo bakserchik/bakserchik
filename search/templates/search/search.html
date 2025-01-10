@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пошук фільмів</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .movie-card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+        }
+        .movie-card img {
+            margin-right: 15px;
+            border-radius: 5px;
+        }
+        .movie-info {
+            flex: 1;
+        }
+        .movie-info h5 {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mb-4">Пошук фільмів</h1>
+
+        <form method="post" class="mb-4">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.query.label_tag }}
+                {{ form.query }}
+            </div>
+            <button type="submit" class="btn btn-primary">Шукати</button>
+        </form>
+
+        {% if results %}
+            <h2>Результати пошуку:</h2>
+            <div>
+                {% for movie in results %}
+                    <div class="movie-card">
+                        <img src="{{ movie.image }}" alt="{{ movie.title }}" width="150" height="150">
+                        <div class="movie-info">
+                            <h5>{{ movie.title }}</h5>
+                            <p>{{ movie.description }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% elif results and form.is_bound %}
+            <p>Нічого не знайдено.</p>
+        {% endif %}
+
+        <a href="/" class="btn btn-secondary mt-4">На головну</a>
+    </div>
+</body>
+</html>
+
