@@ -6,7 +6,7 @@ from .models import Movie
 MOVIES = [
     {
         "title": "Inception",
-        "image": "https://via.placeholder.com/150",
+        "image": "https://www.imdb.com/title/tt1375666/mediaviewer/rm3426651392/?ref_=tt_ov_i",
         "description": "A mind-bending thriller about dream invasion.",
     },
     {
