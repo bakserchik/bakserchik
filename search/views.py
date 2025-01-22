@@ -1,6 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .forms import MovieSearchForm
+
+from search.forms import MovieForm, MovieSearchForm
+
 from .models import Movie
 
 MOVIES = [
@@ -10,7 +12,7 @@ MOVIES = [
         "description": "A mind-bending thriller about dream invasion.",
         "genre": "Sci-Fi, Thriller",
         "year": 2010,
-        "trailer_url": "https://www.youtube.com/embed/YoHD9XEInc0",  # YouTube trailer link
+        "trailer_url": "https://www.youtube.com/embed/YoHD9XEInc0", 
     },
     {
         "title": "The Matrix",
@@ -70,8 +72,6 @@ MOVIES = [
     },
 ]
 
-
-
 def home(request):
     """
     Представлення для домашньої сторінки.
@@ -79,16 +79,35 @@ def home(request):
     return render(request, 'home.html', {'movies': MOVIES})
 
 def search(request):
-    form = MovieSearchForm(request.POST or None)  
+    form = MovieSearchForm(request.POST or None)
     results = []
 
     if form.is_valid():
         query = form.cleaned_data['query']
-        results = [movie for movie in MOVIES if query.lower() in movie["title"].lower()] 
+        results = [movie for movie in MOVIES if query.lower() in movie["title"].lower()]
 
     return render(request, 'search/search.html', {'form': form, 'results': results})
 
 def admin_search(request):
     return HttpResponse("Це сторінка пошуку для адміністратора.")
+
+def add_movie(request):
+    """
+    Представлення для додавання фільму.
+    """
+    if request.method == 'POST':
+        form = MovieForm(request.POST, request.FILES) 
+        if form.is_valid():
+            form.save()  
+            return redirect('home')   
+    else:
+        form = MovieForm() 
+
+    return render(request, 'add_movie.html', {'form': form})
+
+
+
+
+
 
 
