@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Головна сторінка</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+        }
+        /* Стилі для фільмів */
+        .movie {
+            background-color: #333;
+            padding: 10px;
+            border-radius: 10px;
+            margin: 10px;
+            width: 200px;
+            text-align: center;
+            display: inline-block;
+        }
+        .movie img {
+            width: 150px;
+            height: 150px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Фільми</h1>
+    <ul style="list-style-type: none; padding: 0;">
+        {% for movie in movies %}
+            <li class="movie">
+                <strong>{{ movie.title }}</strong><br>
+                <img src="{{ movie.image.url }}" alt="{{ movie.title }}"><br>
+                <p>{{ movie.description }}</p>
+                
+                <form method="post" action="{% url 'toggle_favorite' movie.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        {% if user.is_authenticated and movie in user.favorite_movies.all %}
+                            Вибрано
+                        {% else %}
+                            Додати в обране
+                        {% endif %}
+                    </button>
+                </form>
+                <a href="{% url 'view_cart' %}">Переглянути корзину</a>
+                
+                
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
